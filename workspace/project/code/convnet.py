@@ -1,2 +1,0 @@
-class Convnet(object):
-    pass
