@@ -85,8 +85,8 @@ def show_examples(batch_idx, batch_size,
             target = img_array[center[0] - 16:center[0] + 16, center[1] - 16:center[1] + 16]
 
         # Image.fromarray(img_array).show()
-        Image.fromarray(input).show()
-        Image.fromarray(target).show()
+        # Image.fromarray(input).show()
+        # Image.fromarray(target).show()
         print(i, caption_dict[cap_id])
 
 

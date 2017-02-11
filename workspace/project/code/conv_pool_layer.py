@@ -8,7 +8,7 @@ import numpy as np
 
 
 class ConvPoolLayer(object):
-    def __init__(self, rng, input, filter_shape, image_shape, poolsize=(2, 2)):
+    def __init__(self, rng, input, filter_shape, input_shape, poolsize=(2, 2)):
         """
         Allocate a ConvPoolLayer with shared variable internal parameters.
 
@@ -22,15 +22,15 @@ class ConvPoolLayer(object):
         :param filter_shape: (number of filters, num input feature maps,
                               filter height, filter width)
 
-        :type image_shape: tuple or list of length 4
-        :param image_shape: (batch size, num input feature maps,
+        :type input_shape: tuple or list of length 4
+        :param input_shape: (batch size, num input feature maps,
                              image height, image width)
 
         :type poolsize: tuple or list of length 2
         :param poolsize: the downsampling (pooling) factor (#rows, #cols)
         """
 
-        assert image_shape[1] == filter_shape[1]
+        assert input_shape[1] == filter_shape[1]
         self.input = input
 
         fan_in = np.prod(filter_shape[1:])
@@ -51,7 +51,7 @@ class ConvPoolLayer(object):
             input=input,
             filters=self.W,
             filter_shape=filter_shape,
-            image_shape=image_shape
+            image_shape=input_shape
         )
 
         pooled_out = pool.pool_2d(
