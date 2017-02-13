@@ -56,8 +56,8 @@ class NNet(object):
             [index],
             layer3.errors(y),
             givens={
-                x: test_set_x[index * batch_size: (index + 1) * batch_size],
-                y: test_set_y[index * batch_size: (index + 1) * batch_size]
+                x: data['test_set']['x'][index * batch_size: (index + 1) * batch_size],
+                y: data['test_set']['y'][index * batch_size: (index + 1) * batch_size]
             }
         )
 
@@ -65,8 +65,8 @@ class NNet(object):
             [index],
             layer3.errors(y),
             givens={
-                x: valid_set_x[index * batch_size: (index + 1) * batch_size],
-                y: valid_set_y[index * batch_size: (index + 1) * batch_size]
+                x: data['valid_set']['x'][index * batch_size: (index + 1) * batch_size],
+                y: data['valid_set']['y'][index * batch_size: (index + 1) * batch_size]
             }
         )
 
@@ -84,7 +84,7 @@ class NNet(object):
             cost,
             updates=updates,
             givens={
-                x: train_set_x[index * batch_size: (index + 1) * batch_size],
-                y: train_set_y[index * batch_size: (index + 1) * batch_size]
+                x: data['train_set']['x'][index * batch_size: (index + 1) * batch_size],
+                y: data['train_set']['y'][index * batch_size: (index + 1) * batch_size]
             }
         )

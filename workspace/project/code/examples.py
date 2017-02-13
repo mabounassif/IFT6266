@@ -13,8 +13,8 @@ def resize_mscoco():
     '''
 
     ### PATH need to be fixed
-    data_path = "/datasets/coco/coco/images/train2014"
-    save_dir = "/Tmp/64_64/train2014/"
+    data_path = "/datasets/coco/coco/images/train"
+    save_dir = "/Tmp/64_64/train/"
 
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -52,7 +52,7 @@ def resize_mscoco():
 
 
 def show_examples(batch_idx, batch_size,
-                  mscoco="/Tmp/inpainting/", split="train2014",
+                  mscoco="/Tmp/inpainting/", split="train",
                   caption_path="dict_key_imgID_value_caps_train_and_valid.pkl"):
     """
     Show an example of how to read the dataset
@@ -88,6 +88,51 @@ def show_examples(batch_idx, batch_size,
         # Image.fromarray(input).show()
         # Image.fromarray(target).show()
         print(i, caption_dict[cap_id])
+
+
+def get_batch(batch_idx, batch_size,
+              split="train",
+              mscoco="data/inpainting",
+              caption_path="dict_key_imgID_value_caps_train_and_valid.pkl"):
+    """
+    Returns a dataset image batch iterator
+
+    :param split:
+    :param mscoco: Folder name that contains the training data
+
+     Data should be split into 3 folders train, valid and test2014
+
+    :param caption_path: Pathname of the caption dictionary pickle
+
+    :return: dataset image iterator
+    """
+
+    data_path = os.path.join(mscoco, split)
+    caption_path = os.path.join(mscoco, caption_path)
+
+    with open(caption_path, 'rb') as fd:
+        caption_dict = pkl.load(fd)
+
+    imgs = glob.glob(data_path + "/*.jpg")
+    batch_imgs = imgs[batch_idx * batch_size:(batch_idx +1) * batch_size]
+
+    for i, img_path in enumerate(batch_imgs):
+        img = Image.open(img_path)
+        img_array = np.array(img)
+
+        cap_id = os.path.basename(img_path)[:-4]
+        center = (int(np.floor(img_array.shape[0] / 2.)), int(np.floor(img_array.shape[1] / 2.)))
+
+        if len(img_array.shape) == 3:
+            input = np.copy(img_array)
+            input[center[0] - 16:center[0] + 16, center[1] - 16:center[1] + 16, :] = 0
+            target = img_array[center[0] - 16:center[0] + 16, center[1] - 16:center[1] + 16, :]
+        else:
+            input = np.zeros(img_array.shape)
+            target = np.zeros(img_array.shape)
+
+
+    return {}
 
 
 if __name__ == '__main__':

@@ -51,7 +51,7 @@ class ConvPoolLayer(object):
             input=input,
             filters=self.W,
             filter_shape=filter_shape,
-            image_shape=input_shape
+            input_shape=input_shape
         )
 
         pooled_out = pool.pool_2d(
