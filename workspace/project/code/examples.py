@@ -114,7 +114,13 @@ def get_batch(batch_idx, batch_size,
         caption_dict = pkl.load(fd)
 
     imgs = glob.glob(data_path + "/*.jpg")
-    batch_imgs = imgs[batch_idx * batch_size:(batch_idx +1) * batch_size]
+    batch_imgs = imgs[batch_idx * batch_size:(batch_idx + 1) * batch_size]
+
+    data = {
+        'inputs': [],
+        'targets': [],
+        'captions': []
+    }
 
     for i, img_path in enumerate(batch_imgs):
         img = Image.open(img_path)
@@ -127,12 +133,13 @@ def get_batch(batch_idx, batch_size,
             input = np.copy(img_array)
             input[center[0] - 16:center[0] + 16, center[1] - 16:center[1] + 16, :] = 0
             target = img_array[center[0] - 16:center[0] + 16, center[1] - 16:center[1] + 16, :]
-        else:
-            input = np.zeros(img_array.shape)
-            target = np.zeros(img_array.shape)
+            captions = caption_dict[cap_id]
 
+            data['inputs'].append(input)
+            data['targes'].append(target)
+            data['captions'].append(captions)
 
-    return {}
+    return data
 
 
 if __name__ == '__main__':

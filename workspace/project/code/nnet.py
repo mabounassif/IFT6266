@@ -4,17 +4,17 @@ from workspace.project.code.conv_pool_layer import ConvPoolLayer
 from workspace.project.code.mlp import HiddenLayer
 from workspace.project.code.logistic_sgd import LogisticRegression
 
+from workspace.project.code.examples import get_batch
+
 from theano import tensor as T
 
 
 class NNet(object):
-    def __init__(self, rng, batch_size, data, nkerns_options, learning_rate):
+    def __init__(self, rng, batch_size, nkerns_options, learning_rate):
         print('... building the nnet')
 
         x = T.matrix('x')  # the data is presented as rasterized images
         y = T.ivector('y')
-
-        self.data = data
 
         index = T.lscalar()
 
@@ -56,8 +56,8 @@ class NNet(object):
             [index],
             layer3.errors(y),
             givens={
-                x: data['test_set']['x'][index * batch_size: (index + 1) * batch_size],
-                y: data['test_set']['y'][index * batch_size: (index + 1) * batch_size]
+                x: get_batch(index, batch_size, split='train')['inputs'],
+                y: get_batch(index, batch_size, split='train')['targets']
             }
         )
 
