@@ -1,0 +1,3 @@
+[submodule "workspace/project"]
+	path = workspace/project
+	url = git@github.com:mabounassif/conditional_pixel_cnn_theano.git
